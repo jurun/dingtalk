@@ -28,7 +28,7 @@ func init() {
 	}
 }
 
-type accessTokenCache interface {
+type AccessTokenCache interface {
 	Get(key string) (string, error)
 	Set(key, token string, expiration time.Duration) error
 }
@@ -45,10 +45,10 @@ func (this *defaultCache) Set(key, token string, expiration time.Duration) error
 }
 
 type _accessToken struct {
-	cache accessTokenCache
+	cache AccessTokenCache
 }
 
-func (this *_accessToken) SetCache(cache accessTokenCache) {
+func (this *_accessToken) SetCache(cache AccessTokenCache) {
 	this.cache = cache
 }
 
