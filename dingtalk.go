@@ -10,6 +10,7 @@ import (
 const (
 	ACCESS_TOKEN_KEY     = "dd:token"
 	ACCESS_TOKEN_EXPIRES = int64(7000)
+	ACCESS_URL ="https://oapi.dingtalk.com"
 )
 
 var Option option
