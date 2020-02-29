@@ -40,6 +40,7 @@ type ListDepartment struct {
 	ID              int    `json:"id"`
 	Name            string `json:"name"`
 	Parentid        int    `json:"parentid"`
+	Child []interface{} `json:"child"`
 }
 
 type List_idsResponse struct {
@@ -77,6 +78,7 @@ func Get(depid string) (rsp GetResponse, err error) {
 func List(depid string) (department []ListDepartment, err error) {
 
 	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
 
 	var _url=""
 	if depid=="" {

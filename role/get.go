@@ -7,14 +7,14 @@ import (
 )
 
 type ListRequest struct {
-	offset int `json:"offset"`
-	size int `json:"size"`
+	Offset int `json:"offset"`
+	Size int `json:"size"`
 }
 
 type SimplelistRequest struct {
-	roleId int `json:"role_id"`
-	offset int `json:"offset"`
-	size int `json:"size"`
+	RoleId int `json:"role_id"`
+	Offset int `json:"offset"`
+	Size int `json:"size"`
 }
 
 type GetrolegroupResponse struct {
@@ -52,14 +52,16 @@ type ListResponse struct {
 
 type ListResult struct {
 		HasMore bool `json:"hasMore"`
-		List    []struct {
-			GroupID int    `json:"groupId"`
-			Name    string `json:"name"`
-			Roles   []struct {
-				ID   int    `json:"id"`
-				Name string `json:"name"`
-			} `json:"roles"`
-		} `json:"list"`
+		List    []Listrs `json:"list"`
+}
+
+type Listrs struct {
+	GroupID int    `json:"groupId"`
+	Name    string `json:"name"`
+	Roles   []struct {
+		ID   int    `json:"id"`
+		Name string `json:"name"`
+	} `json:"roles"`
 }
 
 
@@ -81,9 +83,9 @@ type SimpleResult struct {
 func List(data ListRequest) (userlist ListResult, err error) {
 	accessToken, err := dingtalk.AccessToken.GetToken()
 	var _url=""
-	if data.offset!=0&&data.size!=0 {
+	if data.Offset!=0&&data.Size!=0 {
 		_url = fmt.Sprintf("%s/topapi/role/list?access_token=%s&offset=%d&size=%d",
-			dingtalk.ACCESS_URL, accessToken,data.offset,data.size)
+			dingtalk.ACCESS_URL, accessToken,data.Offset,data.Size)
 	}else {
 		_url = fmt.Sprintf("%s/topapi/role/list?access_token=%s",
 			dingtalk.ACCESS_URL, accessToken)
@@ -113,12 +115,12 @@ func Simplelist(data SimplelistRequest) (userlist SimpleResult, err error) {
 	fmt.Println(accessToken)
 
 	var _url=""
-	if data.offset!=0&&data.size!=0 {
+	if data.Offset!=0&&data.Size!=0 {
 		_url = fmt.Sprintf("%s/topapi/role/simplelist?access_token=%s&role_id=%d&offset=%d&size=%d",
-			dingtalk.ACCESS_URL, accessToken,data.roleId,data.offset,data.size)
+			dingtalk.ACCESS_URL, accessToken,data.RoleId,data.Offset,data.Size)
 	}else {
 		_url = fmt.Sprintf("%s/topapi/role/simplelist?access_token=%s&role_id=%d",
-			dingtalk.ACCESS_URL, accessToken,data.roleId)
+			dingtalk.ACCESS_URL, accessToken,data.RoleId)
 	}
 
 
