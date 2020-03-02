@@ -28,7 +28,7 @@ type GetResponse struct {
 
 
 type ListResponse struct {
-	Department []ListDepartment `json:"department"`
+	Department []*ListDepartment `json:"department"`
 	Errcode int    `json:"errcode"`
 	Errmsg  string `json:"errmsg"`
 }
@@ -40,7 +40,7 @@ type ListDepartment struct {
 	ID              int    `json:"id"`
 	Name            string `json:"name"`
 	Parentid        int    `json:"parentid"`
-	Child []interface{} `json:"child"`
+	Child []*ListDepartment `json:"child"`
 }
 
 type List_idsResponse struct {
@@ -75,7 +75,7 @@ func Get(depid string) (rsp GetResponse, err error) {
 
 
 //获取部门列表
-func List(depid string) (department []ListDepartment, err error) {
+func List(depid string) (department []*ListDepartment, err error) {
 
 	accessToken, err := dingtalk.AccessToken.GetToken()
 	fmt.Println(accessToken)

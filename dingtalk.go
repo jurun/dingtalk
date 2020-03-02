@@ -65,9 +65,9 @@ func (this *_accessToken) GetToken() (string, error) {
 	//key := fmt.Sprintf("%s:%s", ACCESS_TOKEN_KEY, Option.AppKey)
 	//token, err := this.cache.Get(Option.AppKey)
 	token, err := Option.Cache.Get(Option.AppKey)
-	if err != nil {
-		return "", err
-	}
+	//if err != nil {
+	//	return "", err
+	//}
 	if token != "" {
 		fmt.Println("命中缓存")
 		return token, nil

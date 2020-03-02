@@ -19,11 +19,11 @@ type UserinfoResponse struct {
 	IsLeaderInDepts string `json:"isLeaderInDepts"`
 	IsSenior        bool   `json:"isSenior"`
 	Jobnumber       string `json:"jobnumber"`
+	Mobile          string   `json:"mobile"`
 	Name            string `json:"name"`
 	OrderInDepts    string `json:"orderInDepts"`
 	Position        string `json:"position"`
 	Roles           []struct {
-		GroupName string `json:"groupName"`
 		ID        int    `json:"id"`
 		Name      string `json:"name"`
 	} `json:"roles"`
@@ -32,9 +32,9 @@ type UserinfoResponse struct {
 }
 
 type ListbypageRequest struct {
-	deptId int `json:"deptId"`
-	offset int `json:"offset"`
-	size int `json:"size"`
+	DeptId int `json:"deptId"`
+	Offset int `json:"offset"`
+	Size int `json:"size"`
 }
 
 type ListbypageUserlist struct {
@@ -155,12 +155,12 @@ func Listbypage(data ListbypageRequest) (userlist []ListbypageUserlist, err erro
 	fmt.Println(accessToken)
 
 	var _url=""
-	if data.offset!=0&&data.size!=0 {
+	if data.Size!=0 {
 		_url = fmt.Sprintf("%s/user/listbypage?access_token=%s&department_id=%d&offset=%d&size=%d",
-			dingtalk.ACCESS_URL, accessToken,data.deptId,data.offset,data.size)
+			dingtalk.ACCESS_URL, accessToken,data.DeptId,data.Offset,data.Size)
 	}else {
 		_url = fmt.Sprintf("%s/user/listbypage?access_token=%s&department_id=%d",
-			dingtalk.ACCESS_URL, accessToken,data.deptId)
+			dingtalk.ACCESS_URL, accessToken,data.DeptId)
 	}
 
 

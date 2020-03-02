@@ -13,8 +13,8 @@ func Test_user_get(t *testing.T) {
 
 
 	//_,id,err:=GetUseridByUnionid("GraZjx1CJ1cpzrdWc4PSegiEiE")
-	//id,err:=Listbypage(ListbypageRequest{deptId:1,offset:1,size:1})
-	id,err:=Simplelist(SimplelistRequest{deptId:1,offset:1,size:1})
+	id,err:=Listbypage(ListbypageRequest{DeptId:1,Offset:0,Size:20})
+	//id,err:=Simplelist(SimplelistRequest{deptId:1,offset:1,size:1})
 	//id,err:=GetDeptMember("1")
 	//id,err:=GetbyMobile("15901084927")
 	//id,err:=Get("1203261440752994")

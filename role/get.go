@@ -73,10 +73,12 @@ type SimplelistResponse struct {
 
 type SimpleResult struct {
 	HasMore bool `json:"hasMore"`
-	List    []struct {
-		Name   string `json:"name"`
-		Userid string `json:"userid"`
-	} `json:"list"`
+	List    []SimpleList `json:"list"`
+}
+
+type SimpleList struct {
+	Name   string `json:"name"`
+	Userid string `json:"userid"`
 }
 
 //获取角色列表
