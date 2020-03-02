@@ -8,23 +8,24 @@ import (
 )
 
 const (
-	ACCESS_TOKEN_KEY     = "dd:token"
 	ACCESS_TOKEN_EXPIRES = int64(7000)
-	ACCESS_URL ="https://oapi.dingtalk.com"
+	ACCESS_URL           = "https://oapi.dingtalk.com"
 )
 
 var Option option
 
 type option struct {
 	AppKey, AppSecret string
+	Cache             AccessTokenCache
 }
 
 var AccessToken *_accessToken
 
 func init() {
+	Option.Cache = new(defaultCache)
 	if AccessToken == nil {
 		AccessToken = &_accessToken{
-			cache: new(defaultCache),
+			//cache: new(defaultCache),
 		}
 	}
 }
@@ -46,12 +47,12 @@ func (this *defaultCache) Set(key, token string, expiration time.Duration) error
 }
 
 type _accessToken struct {
-	cache AccessTokenCache
+	//cache AccessTokenCache
 }
 
-func (this *_accessToken) SetCache(cache AccessTokenCache) {
-	this.cache = cache
-}
+//func (this *_accessToken) SetCache(cache AccessTokenCache) {
+//	this.cache = cache
+//}
 
 func (this *_accessToken) GetToken() (string, error) {
 	if Option.AppKey == "" {
@@ -61,8 +62,9 @@ func (this *_accessToken) GetToken() (string, error) {
 		return "", errors.New("没有设置 appSecret")
 	}
 
-	key := fmt.Sprintf("%s:%s", ACCESS_TOKEN_KEY, Option.AppKey)
-	token, err := this.cache.Get(key)
+	//key := fmt.Sprintf("%s:%s", ACCESS_TOKEN_KEY, Option.AppKey)
+	//token, err := this.cache.Get(Option.AppKey)
+	token, err := Option.Cache.Get(Option.AppKey)
 	if err != nil {
 		return "", err
 	}
@@ -91,8 +93,9 @@ func (this *_accessToken) GetToken() (string, error) {
 		return "", errors.New(rsp.Errmsg)
 	}
 
-	err = this.cache.Set(
-		key,
+	//err = this.cache.Set(
+	err = Option.Cache.Set(
+		Option.AppKey,
 		rsp.AccessToken,
 		time.Duration(ACCESS_TOKEN_EXPIRES)*time.Second,
 	)
