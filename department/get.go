@@ -49,6 +49,13 @@ type List_idsResponse struct {
 	sub_dept_id_list []int `json:"sub_dept_id_list"`
 }
 
+type Parent_idsResponse struct {
+	Errcode int    `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+	ParentIds []int `json:"parentIds"`
+}
+
+
 //获取部门详情
 func Get(depid string) (rsp GetResponse, err error) {
 
@@ -129,4 +136,28 @@ func List_ids(depid string) (sub_dept_id_list []int, err error) {
 	}
 
 	return rsp.sub_dept_id_list, nil
+}
+
+//获取父部门路径
+func List_parent_depts_by_dept(depid string) (parentids []int, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	_url := fmt.Sprintf("%s/department/list_parent_depts_by_dept?access_token=%s&id=%s",
+		dingtalk.ACCESS_URL, accessToken,depid)
+
+	var rsp Parent_idsResponse
+	httpResp, _, errs := gorequest.New().Get(_url).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return nil, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return nil, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return nil, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return rsp.ParentIds, nil
 }

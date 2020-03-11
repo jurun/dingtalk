@@ -13,7 +13,8 @@ func Test_dep_get(t *testing.T) {
 
 
 	//id,err:=Get("1")
-	id,err:=List("")
+	//id,err:=List("")
+	id,err:=List_parent_depts_by_dept("243665884")
 	//id,err:=List_ids("1")
 
 	if err != nil {
