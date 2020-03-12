@@ -19,7 +19,7 @@ type ListRecordResponse struct {
 }
 
 type Recordresult struct {
-	BaseCheckTime  int     `json:"baseCheckTime"`
+	BaseCheckTime  int64     `json:"baseCheckTime"`
 	CheckType      string  `json:"checkType"`
 	CorpID         string  `json:"corpId"`
 	DeviceID       string  `json:"deviceId"`
@@ -28,18 +28,18 @@ type Recordresult struct {
 	IsLegal        string  `json:"isLegal"`
 	LocationMethod string  `json:"locationMethod"`
 	LocationResult string  `json:"locationResult"`
-	PlanCheckTime  int     `json:"planCheckTime"`
+	PlanCheckTime  int64     `json:"planCheckTime"`
 	PlanID         int     `json:"planId"`
 	ProcInstID     string  `json:"procInstId"`
 	SourceType     string  `json:"sourceType"`
 	TimeResult     string  `json:"timeResult"`
 	UserAccuracy   int     `json:"userAccuracy"`
 	UserAddress    string  `json:"userAddress"`
-	UserCheckTime  int     `json:"userCheckTime"`
+	UserCheckTime  int64     `json:"userCheckTime"`
 	UserID         string  `json:"userId"`
 	UserLatitude   int     `json:"userLatitude"`
 	UserLongitude  float64 `json:"userLongitude"`
-	WorkDate       int     `json:"workDate"`
+	WorkDate       int64     `json:"workDate"`
 }
 
 type ListRequest struct {
@@ -58,7 +58,7 @@ type ListResponse struct {
 }
 
 type Recordlistresult struct {
-	BaseCheckTime  int    `json:"baseCheckTime"`
+	BaseCheckTime  int64    `json:"baseCheckTime"`
 	CheckType      string `json:"checkType"`
 	CorpID         string `json:"corpId"`
 	GroupID        int    `json:"groupId"`
@@ -68,9 +68,9 @@ type Recordlistresult struct {
 	ProcInstID     string `json:"procInstId"`
 	RecordID       int    `json:"recordId"`
 	TimeResult     string `json:"timeResult"`
-	UserCheckTime  int    `json:"userCheckTime"`
+	UserCheckTime  int64    `json:"userCheckTime"`
 	UserID         string `json:"userId"`
-	WorkDate       int    `json:"workDate"`
+	WorkDate       int64    `json:"workDate"`
 }
 
 //获取打卡详情

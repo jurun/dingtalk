@@ -12,7 +12,7 @@ type UserinfoResponse struct {
 	Department      []int  `json:"department"`
 	Errcode         int    `json:"errcode"`
 	Errmsg          string `json:"errmsg"`
-	HiredDate       int    `json:"hiredDate"`
+	HiredDate       int64    `json:"hiredDate"`
 	IsAdmin         bool   `json:"isAdmin"`
 	IsBoss          bool   `json:"isBoss"`
 	IsHide          bool   `json:"isHide"`
