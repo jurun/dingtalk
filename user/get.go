@@ -71,9 +71,9 @@ type ListbypageResponse struct {
 
 
 type SimplelistRequest struct {
-	deptId int `json:"deptId"`
-	offset int `json:"offset"`
-	size int `json:"size"`
+	DeptId int `json:"deptId"`
+	Offset int `json:"offset"`
+	Size int `json:"size"`
 }
 
 
@@ -188,12 +188,12 @@ func Simplelist(data SimplelistRequest) (userlist []SimplelistUserlist, err erro
 	accessToken, err := dingtalk.AccessToken.GetToken()
 
 	var _url=""
-	if data.offset!=0&&data.size!=0 {
+	if data.Offset!=0&&data.Size!=0 {
 		_url = fmt.Sprintf("%s/user/simplelist?access_token=%s&department_id=%d&offset=%d&size=%d",
-			dingtalk.ACCESS_URL, accessToken,data.deptId,data.offset,data.size)
+			dingtalk.ACCESS_URL, accessToken,data.DeptId,data.Offset,data.Size)
 	}else {
 		_url = fmt.Sprintf("%s/user/simplelist?access_token=%s&department_id=%d",
-			dingtalk.ACCESS_URL, accessToken,data.deptId)
+			dingtalk.ACCESS_URL, accessToken,data.DeptId)
 	}
 
 

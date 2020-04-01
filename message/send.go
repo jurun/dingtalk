@@ -92,6 +92,7 @@ type RecallRequest struct {
 func SendworkMessage(data interface{}) (taskid int, err error) {
 
 	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
 
 	_url := fmt.Sprintf("%s/topapi/message/corpconversation/asyncsend_v2?access_token=%s",
 		dingtalk.ACCESS_URL, accessToken)
