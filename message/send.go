@@ -49,6 +49,26 @@ type Rich struct {
 	Unit string `json:"unit"`
 }
 
+//普通消息response
+
+type Send_to_conversationOaRequest struct {
+	Sender string `json:"sender"`
+	Cid string `json:"cid"`
+	Msg Oamsg `json:"msg"`
+}
+
+type Send_to_conversationCardRequest struct {
+	Sender string `json:"sender"`
+	Cid string `json:"cid"`
+	Msg Cardmsg `json:"msg"`
+}
+
+type Send_to_conversationResponse struct {
+	Errcode int    `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+	Receiver string    `json:"receiver"`
+}
+
 //卡片消息相关结构体
 type AsyncsendResponse struct {
 	Errcode int    `json:"errcode"`
@@ -87,6 +107,75 @@ type RecallRequest struct {
 	Agent_id int `json:"agent_id"`
 	Msg_task_id int `json:"msg_task_id"`
 }
+
+
+//群消息相关
+type GetChatResponse struct {
+	ChatInfo chatInfo `json:"chat_info"`
+	Errcode int64  `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+}
+
+type chatInfo struct {
+	Chatid          string   `json:"chatid"`
+	ConversationTag int64    `json:"conversationTag"`
+	Name            string   `json:"name"`
+	Owner           string   `json:"owner"`
+	Useridlist      []string `json:"useridlist"`
+}
+
+
+type ChatCreateResponse struct {
+	Errcode int    `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+	Chatid  string `json:"chatid"`
+	ConversationTag int    `json:"conversationTag"`
+}
+
+type ChatCreateRequest struct {
+	Name  string `json:"name"`
+	Owner  string `json:"owner"`
+	Useridlist []string    `json:"useridlist"`
+}
+
+type ChatSendOaRequest struct {
+	Chatid string `json:"chatid"`
+	Msg Oamsg `json:"msg"`
+}
+
+type ChatSendCardRequest struct {
+	Chatid string `json:"chatid"`
+	Msg Cardmsg `json:"msg"`
+}
+
+type ChatSendResponse struct {
+	Errcode int    `json:"errcode"`
+	Errmsg  string `json:"errmsg"`
+	MessageId string    `json:"messageId"`
+}
+
+
+type ChatUpdateRequest struct {
+	Chatid  string `json:"chatid"`
+	Name  string `json:"name"`
+	Owner  string `json:"owner"`
+	ShowHistoryType  int `json:"ShowHistoryType"`
+	Add_useridlist []string    `json:"add_useridlist"`
+}
+
+type GetReadListRequest struct {
+	MessageId  string `json:"messageId"`
+	Cursor  int `json:"cursor"`
+	Size int `json:"size"`
+}
+
+type GetReadListResponse struct {
+	Errcode        int64    `json:"errcode"`
+	Errmsg         string   `json:"errmsg"`
+	NextCursor     int64    `json:"next_cursor"`
+	ReadUserIDList []string `json:"readUserIdList"`
+}
+
 
 //发送工作消息
 func SendworkMessage(data interface{}) (taskid int, err error) {
@@ -139,3 +228,111 @@ func Recall(data RecallRequest) (rs bool, err error) {
 
 	return true, nil
 }
+
+
+//发送普通消息
+func Send_to_conversation(data interface{}) (receiver string, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
+
+	_url := fmt.Sprintf("%s/message/send_to_conversation?access_token=%s",
+		dingtalk.ACCESS_URL, accessToken)
+
+	var rsp Send_to_conversationResponse
+	httpResp, _, errs := gorequest.New().Post(_url).Send(data).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return receiver, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return receiver, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return receiver, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return rsp.Receiver, nil
+}
+
+//群创建会话
+func ChatCreate(data ChatCreateRequest) (rs ChatCreateResponse, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
+
+	_url := fmt.Sprintf("%s/chat/create?access_token=%s",
+		dingtalk.ACCESS_URL, accessToken)
+
+	var rsp ChatCreateResponse
+	httpResp, _, errs := gorequest.New().Post(_url).Send(data).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return rs, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return rs, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return rs, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return rsp, nil
+}
+
+
+//发送群消息
+func Chat_Send(data interface{}) (messageId string, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
+
+	_url := fmt.Sprintf("%s/chat/send?access_token=%s",
+		dingtalk.ACCESS_URL, accessToken)
+
+	var rsp ChatSendResponse
+	httpResp, _, errs := gorequest.New().Post(_url).Send(data).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return messageId, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return messageId, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return messageId, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return rsp.MessageId, nil
+}
+
+
+//群修改会话
+func ChatUpdate(data ChatUpdateRequest) (rs bool, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
+
+	_url := fmt.Sprintf("%s/chat/update?access_token=%s",
+		dingtalk.ACCESS_URL, accessToken)
+
+	var rsp ChatCreateResponse
+	httpResp, _, errs := gorequest.New().Post(_url).Send(data).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return false, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return false, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return false, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return true, nil
+}
+

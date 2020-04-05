@@ -88,3 +88,57 @@ func Getsendprogress(data GetsendprogressRequest) (rs Progress, err error) {
 
 	return rsp.Progress, nil
 }
+
+//查询群消息已读人员列表
+func GetReadList(data GetReadListRequest) (rs GetReadListResponse, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
+
+	_url := fmt.Sprintf("%s/chat/getReadList?access_token=%s&messageId=%s&cursor=%d&size=%d",
+		dingtalk.ACCESS_URL, accessToken,data.MessageId,data.Cursor,data.Size)
+
+	var rsp GetReadListResponse
+	httpResp, _, errs := gorequest.New().Get(_url).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return rs, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return rs, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return rs, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return rsp, nil
+}
+
+//获取群会话
+func GetChat(chatid string) (rs chatInfo, err error) {
+
+	accessToken, err := dingtalk.AccessToken.GetToken()
+	fmt.Println(accessToken)
+
+	_url := fmt.Sprintf("%s/chat/get?access_token=%s&chatid=%s",
+		dingtalk.ACCESS_URL, accessToken,chatid)
+
+	var rsp GetChatResponse
+	httpResp, _, errs := gorequest.New().Get(_url).EndStruct(&rsp)
+	if len(errs) > 0 {
+		return rs, errs[0]
+	}
+
+	if httpResp.StatusCode != 200 {
+		return rs, fmt.Errorf("钉钉服务器异常,httpCode: %d", httpResp.StatusCode)
+	}
+
+	if rsp.Errcode != 0 {
+		return rs, fmt.Errorf("接口调用失败，errcode: %d，errmsg: %s", rsp.Errcode, rsp.Errmsg)
+	}
+
+	return rsp.ChatInfo, nil
+}
+
+
